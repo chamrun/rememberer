@@ -132,3 +132,6 @@ dmypy.json
 # PyCharm project files
 .idea
 .pypirc
+
+# this is genreated by test runner
+src/_trial_temp
