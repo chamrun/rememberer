@@ -29,3 +29,16 @@ def save_obj(obj, name=None, path='./pickles/'):
     os.chdir(current_dir)
     return abspath
 
+
+def load_obj(name, path='./pickles/'):
+    if path[-1] != '/':
+        path += '/'
+
+    if not (name.endswith('.pkl') or name.endswith('.pickle')):
+        name += '.pkl'
+
+    try:
+        with open(f'{path}{name}', 'rb') as f:
+            return pickle.load(f)
+    except FileNotFoundError:
+        return None
