@@ -3,7 +3,14 @@ import pickle
 import hashlib
 
 
-def save_obj(obj, name=None, path='./pickles/'):
+def save_obj(obj, name=None, path='./rem/'):
+    """
+    Serialize and save the given object to disk.
+    :param obj: The object to be serialized and saved.
+    :param name: The name to be used for the saved file. If not provided, a SHA256 hash of the object will be used.
+    :param path: The path to the directory where the file will be saved. Default is './rem/'.
+    :return: The absolute path of the saved file.
+    """
     if path[-1] != '/':
         path += '/'
 
@@ -30,7 +37,13 @@ def save_obj(obj, name=None, path='./pickles/'):
     return abspath
 
 
-def load_obj(name, path='./pickles/'):
+def load_obj(name, path='./rem/'):
+    """
+    Load and deserialize the object saved at the given path.
+    :param name: The name of the file to be loaded.
+    :param path: The path to the directory where the file is saved. Default is './rem/'.
+    :return: The deserialized object.
+    """
     if path[-1] != '/':
         path += '/'
 
@@ -46,11 +59,17 @@ def load_obj(name, path='./pickles/'):
 
 def rem(func, *args, **kwargs):
     """
+    This is a decorator function that can be applied to another function, it will cache the result of the function
+    based on the arguments passed to it, so that if the same arguments are passed again, the cached result will be
+    returned instead of re-computing the result.
 
-    :param func:
-    :param args:
-    :param kwargs:
-    :return:
+    Parameters:
+    func (function): The function that this decorator will be applied to.
+    *args: Positional arguments that will be passed to the function.
+    **kwargs: Keyword arguments that will be passed to the function.
+
+    Returns:
+    The result of the function call.
     """
     hash_object = hashlib.sha256()
     hash_object.update(pickle.dumps(func))
