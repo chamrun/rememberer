@@ -135,4 +135,4 @@ dmypy.json
 
 # this is genreated by test runner
 src/_trial_temp
-src/test/_trial_temp
+src/rememberer/test/_trial_temp
