@@ -59,7 +59,7 @@ def load_obj(name, path='./rem/'):
 
 def rem(func, *args, **kwargs):
     """
-    This is a decorator function that can be applied to another function, it will cache the result of the function
+    This is a function that can be applied to another function, it will cache the result of the function
     based on the arguments passed to it, so that if the same arguments are passed again, the cached result will be
     returned instead of re-computing the result.
 
@@ -82,13 +82,3 @@ def rem(func, *args, **kwargs):
     result = func(*args, **kwargs)
     save_obj(result, name)
     return result
-
-
-def test():
-    print(save_obj({'a': 1}, 'test'))
-    print(load_obj('test'))
-    print(rem(lambda x: x + 1, 2))
-
-
-if __name__ == '__main__':
-    test()
