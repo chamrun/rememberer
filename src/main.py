@@ -42,3 +42,25 @@ def load_obj(name, path='./pickles/'):
             return pickle.load(f)
     except FileNotFoundError:
         return None
+
+
+def rem(func, *args, **kwargs):
+    """
+
+    :param func:
+    :param args:
+    :param kwargs:
+    :return:
+    """
+    hash_object = hashlib.sha256()
+    hash_object.update(pickle.dumps(func))
+    hash_object.update(pickle.dumps(args))
+    hash_object.update(pickle.dumps(kwargs))
+    name = hash_object.hexdigest()
+    saved = load_obj(name)
+    if saved:
+        return saved
+    result = func(*args, **kwargs)
+    save_obj(result, name)
+    return result
+
