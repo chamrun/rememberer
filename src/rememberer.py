@@ -83,3 +83,12 @@ def rem(func, *args, **kwargs):
     save_obj(result, name)
     return result
 
+
+def test():
+    print(save_obj({'a': 1}, 'test'))
+    print(load_obj('test'))
+    print(rem(lambda x: x + 1, 2))
+
+
+if __name__ == '__main__':
+    test()
