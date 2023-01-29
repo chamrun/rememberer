@@ -1,7 +1,7 @@
 import unittest
 import os
 
-from src import save_obj
+from rememberer import save_obj
 
 
 class TestSaveObj(unittest.TestCase):

@@ -1,5 +1,5 @@
 import unittest
-from src import save_obj, load_obj
+from rememberer import save_obj, load_obj
 
 
 class TestLoadObj(unittest.TestCase):
