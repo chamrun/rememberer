@@ -152,6 +152,32 @@ def _create_name(func, args, kwargs) -> str:
 
         Returns:
             The string representation of the given object.
+
+        Examples:
+            >>> stringify(123.456)
+            '123.456'
+
+            >>> stringify(True)
+            'True'
+
+            >>> stringify({'a': 1, 'b': 2})
+            "{'a': 1, 'b': 2}"
+
+            >>> stringify({1, 2, 3})
+            '{1, 2, 3}'
+
+            >>> stringify(print)
+            '<built-in function print>'
+
+            >>> class A:
+            ...     def __init__(self, a, b):
+            ...         self.a = a
+            ...         self.b = b
+            ...
+            ...     def __repr__(self):
+            ...         return f'A({self.a}, {self.b})'
+            >>> stringify(A(1, 2))
+            'A(1, 2)'
         """
         return str(obj) if isinstance(obj, (int, float, str, bool)) else repr(obj)
 
