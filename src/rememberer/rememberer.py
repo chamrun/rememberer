@@ -1,6 +1,7 @@
 import os
 import pickle
 import hashlib
+from functools import wraps
 from typing import AnyStr
 from types import FunctionType
 
@@ -105,12 +106,9 @@ def forget(func: FunctionType, *args, **kwargs):
     Returns:
         The result of the function call.
     """
-    params = (func.__module__ + func.__name__).encode() + func.__code__.co_code + b"".join(
-
     name = _create_name(func, args, kwargs)
     try:
         os.remove(f'./rem/{name}.pkl')
-
     except FileNotFoundError:
         pass
 
@@ -171,3 +169,24 @@ def _create_name(func: FunctionType, args: tuple, kwargs: dict) -> str:
         f"{key}={stringify(value)}".encode() for key, value in kwargs.items())
     name = hashlib.sha256(params).hexdigest()
     return name
+
+
+def rem_dec(func: FunctionType) -> FunctionType:
+    """
+    This is a decorator that can be applied to another function, it will cache the result of the function
+    based on the arguments passed to it, so that if the same arguments are passed again, the cached result will be
+    returned instead of re-computing the result.
+
+    Parameters:
+        func (FunctionType): The function that this decorator will be applied to.
+
+    Returns:
+        The result of the function call.
+    """
+
+    @wraps(func)  # This is for the sake of the documentation
+    def wrapper(*args, **kwargs) -> object:
+        result = rem(func, *args, **kwargs)
+        return result
+
+    return wrapper
