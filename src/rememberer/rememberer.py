@@ -82,14 +82,7 @@ def rem(func: FunctionType, *args, **kwargs) -> object:
         The result of the function call.
     """
 
-    def stringify(obj):
-        return str(obj) if isinstance(obj, (int, float, str, bool)) else repr(obj)
-
-    params = (func.__module__ + func.__name__).encode() + func.__code__.co_code + b"".join(
-        stringify(arg).encode() for arg in args) + b"".join(
-        f"{key}={stringify(value)}".encode() for key, value in kwargs.items())
-
-    name = hashlib.sha256(params).hexdigest()
+    name = _create_name(func, args, kwargs)
     saved = load_obj(name)
     if saved:
         return saved
@@ -112,25 +105,17 @@ def forget(func: FunctionType, *args, **kwargs):
     Returns:
         The result of the function call.
     """
-
-    def stringify(obj: object) -> str:
-        return str(obj) if isinstance(obj, (int, float, str, bool)) else repr(obj)
-
     params = (func.__module__ + func.__name__).encode() + func.__code__.co_code + b"".join(
-        stringify(arg).encode() for arg in args) + b"".join(
-        f"{key}={stringify(value)}".encode() for key, value in kwargs.items())
 
-    name = hashlib.sha256(params).hexdigest()
-    saved = load_obj(name)
-    if saved:
+    name = _create_name(func, args, kwargs)
+    try:
         os.remove(f'./rem/{name}.pkl')
-        return saved
 
-    result = func(*args, **kwargs)
-    return result
+    except FileNotFoundError:
+        pass
 
 
-def _create_name(func, args, kwargs) -> str:
+def _create_name(func: FunctionType, args: tuple, kwargs: dict) -> str:
     """
     Create a name for the cached result of the function based on the arguments passed to it.
 
