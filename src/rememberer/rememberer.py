@@ -71,14 +71,19 @@ def rem(func, *args, **kwargs):
     Returns:
     The result of the function call.
     """
-    hash_object = hashlib.sha256()
-    hash_object.update(pickle.dumps(func))
-    hash_object.update(pickle.dumps(args))
-    hash_object.update(pickle.dumps(kwargs))
-    name = hash_object.hexdigest()
+
+    def stringify(obj):
+        return str(obj) if isinstance(obj, (int, float, str, bool)) else repr(obj)
+
+    params = (func.__module__ + func.__name__).encode() + func.__code__.co_code + b"".join(
+        stringify(arg).encode() for arg in args) + b"".join(
+        f"{key}={stringify(value)}".encode() for key, value in kwargs.items())
+
+    name = hashlib.sha256(params).hexdigest()
     saved = load_obj(name)
     if saved:
         return saved
+
     result = func(*args, **kwargs)
     save_obj(result, name)
     return result
