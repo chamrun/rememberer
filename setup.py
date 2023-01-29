@@ -7,7 +7,7 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setup(
     name="rememberer",
-    version="0.1.3",
+    version="0.1.4",
     license="MIT",
     description="Rememberer is a tool to help your functions remember their previous results.",
     long_description=long_description,

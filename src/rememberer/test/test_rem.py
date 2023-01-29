@@ -1,7 +1,7 @@
 import unittest
 import time
 
-from src import rem
+from rememberer import rem
 
 
 def test_func(a, b):

@@ -87,3 +87,66 @@ def rem(func, *args, **kwargs):
     result = func(*args, **kwargs)
     save_obj(result, name)
     return result
+
+
+def forget(func, *args, **kwargs):
+    """
+    This is a function that can be applied to another function, it will delete the cached result of the function
+    based on the arguments passed to it.
+
+    Parameters:
+        func (function): The function that this decorator will be applied to.
+        *args: Positional arguments that will be passed to the function.
+        **kwargs: Keyword arguments that will be passed to the function.
+
+    Returns:
+        The result of the function call.
+    """
+
+    def stringify(obj):
+        return str(obj) if isinstance(obj, (int, float, str, bool)) else repr(obj)
+
+    params = (func.__module__ + func.__name__).encode() + func.__code__.co_code + b"".join(
+        stringify(arg).encode() for arg in args) + b"".join(
+        f"{key}={stringify(value)}".encode() for key, value in kwargs.items())
+
+    name = hashlib.sha256(params).hexdigest()
+    saved = load_obj(name)
+    if saved:
+        os.remove(f'./rem/{name}.pkl')
+        return saved
+
+    result = func(*args, **kwargs)
+    return result
+
+
+def _create_name(func, args, kwargs):
+    """
+    Create a name for the cached result of the function based on the arguments passed to it.
+
+    Parameters:
+        func (function): The function that this decorator will be applied to.
+        *args: Positional arguments that will be passed to the function.
+        **kwargs: Keyword arguments that will be passed to the function.
+
+    Returns:
+        The name of the cached result.
+    """
+
+    def stringify(obj):
+        """
+        Convert the given object to a string.
+
+        Parameters:
+            obj (object): The object to be converted to a string.
+
+        Returns:
+            The string representation of the given object.
+        """
+        return str(obj) if isinstance(obj, (int, float, str, bool)) else repr(obj)
+
+    params = (func.__module__ + func.__name__).encode() + func.__code__.co_code + b"".join(
+        stringify(arg).encode() for arg in args) + b"".join(
+        f"{key}={stringify(value)}".encode() for key, value in kwargs.items())
+    name = hashlib.sha256(params).hexdigest()
+    return name
