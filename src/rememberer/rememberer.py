@@ -1,8 +1,8 @@
 import os
 import pickle
 import hashlib
-from builtins import function
 from typing import AnyStr
+from types import FunctionType
 
 
 def save_obj(obj: object, name: str = None, path: str = './rem/') -> AnyStr:
@@ -67,14 +67,14 @@ def load_obj(name: str, path: str = './rem/'):
         return None
 
 
-def rem(func: function, *args, **kwargs) -> object:
+def rem(func: FunctionType, *args, **kwargs) -> object:
     """
     This is a function that can be applied to another function, it will cache the result of the function
     based on the arguments passed to it, so that if the same arguments are passed again, the cached result will be
     returned instead of re-computing the result.
 
     Parameters:
-        func (function): The function that this decorator will be applied to.
+        func (FunctionType): The function that this decorator will be applied to.
         *args: Positional arguments that will be passed to the function.
         **kwargs: Keyword arguments that will be passed to the function.
 
@@ -99,13 +99,13 @@ def rem(func: function, *args, **kwargs) -> object:
     return result
 
 
-def forget(func: function, *args, **kwargs):
+def forget(func: FunctionType, *args, **kwargs):
     """
     This is a function that can be applied to another function, it will delete the cached result of the function
     based on the arguments passed to it.
 
     Parameters:
-        func (function): The function that this decorator will be applied to.
+        func (FunctionType): The function that this decorator will be applied to.
         *args: Positional arguments that will be passed to the function.
         **kwargs: Keyword arguments that will be passed to the function.
 
