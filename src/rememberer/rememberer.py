@@ -85,7 +85,7 @@ def rem(func: FunctionType, *args, **kwargs) -> object:
 
     name = _create_name(func, args, kwargs)
     saved = load_obj(name)
-    if saved:
+    if saved is not None:
         return saved
 
     result = func(*args, **kwargs)
