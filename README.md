@@ -2,7 +2,7 @@
 Rememberer is a tool to help your functions remember their previous results.
 
 
-The advantage of this package compared to other memorization packages is that 
+The advantage of this package compared to other memoization packages is that 
 it will remember the result of the function even if you kill the program and restart it. 
 
 It will also remember the result even if you restart the python interpreter because
